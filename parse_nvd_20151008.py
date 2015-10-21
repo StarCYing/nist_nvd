@@ -106,36 +106,36 @@ with open('./nvd.json', 'wb') as f:
     json.dump(nvd_json, f)
 
 # # Build exact edge list
-# nvd_edge = [['source','target','value']]
-# for cve in nvd.keys():
-#     if 'vuln_score' in nvd[cve].keys():
-#         threat = nvd[cve]['vuln_score']
-#     else:
-#         threat = 0.0
-#     if 'vuln_os_plat' in nvd[cve].keys():
-#         cve_type = (nvd[cve]['vuln_vector'], nvd[cve]['vuln_compl'], nvd[cve]['vuln_auth'], nvd[cve]['vuln_confid'], nvd[cve]['vuln_integ'])
-#         for plat in nvd[cve]['vuln_os_plat']:
-#             appendme = [cve_type, plat, threat]
-#             if appendme not in nvd_edge:
-#                 nvd_edge.append(appendme)
+nvd_edge = [['source','target','value']]
+for cve in nvd.keys():
+    if 'vuln_score' in nvd[cve].keys():
+        threat = nvd[cve]['vuln_score']
+    else:
+        threat = 0.0
+    if 'vuln_os_plat' in nvd[cve].keys():
+        cve_type = (nvd[cve]['vuln_vector'], nvd[cve]['vuln_compl'], nvd[cve]['vuln_auth'], nvd[cve]['vuln_confid'], nvd[cve]['vuln_integ'])
+        for plat in nvd[cve]['vuln_os_plat']:
+            appendme = [cve_type, plat, threat]
+            if appendme not in nvd_edge:
+                nvd_edge.append(appendme)
 
 # # Build exact node list
-# nvd_node = [['id','value','type']]
-# for row in nvd_edge:
-#     append_vuln = [row[0],row[2],0]
-#     append_targ = [row[1],0.0,1]
-#     if append_vuln not in nvd_node:
-#         nvd_node.append(append_vuln)
-#     if append_targ not in nvd_node:
-#         nvd_node.append(append_targ)
+nvd_node = [['id','value','type']]
+for row in nvd_edge:
+    append_vuln = [row[0],row[2],0]
+    append_targ = [row[1],0.0,1]
+    if append_vuln not in nvd_node:
+        nvd_node.append(append_vuln)
+    if append_targ not in nvd_node:
+        nvd_node.append(append_targ)
 
-# with open('./nvd_edge.csv', 'wb') as csvfile:
-#     writeme = csv.writer(csvfile, delimiter=',')
-#     writeme.writerows(nvd_edge)
+with open('./nvd_edge.csv', 'wb') as csvfile:
+    writeme = csv.writer(csvfile, delimiter=',')
+    writeme.writerows(nvd_edge)
 
-# with open('./nvd_node.csv', 'wb') as csvfile:
-#     writeme = csv.writer(csvfile, delimiter=',')
-#     writeme.writerows(nvd_node)
+with open('./nvd_node.csv', 'wb') as csvfile:
+    writeme = csv.writer(csvfile, delimiter=',')
+    writeme.writerows(nvd_node)
 
 # print 'Creating Software Schema'
 # software_schema = {}

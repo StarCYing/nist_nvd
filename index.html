@@ -15,9 +15,10 @@
             stroke-width: 2px;
         }
         .textClass {
-            stroke: #323232;
+            /*stroke: #323232;*/
+            stroke: #FFFFFF;
             font-family: "Lucida Grande", "Droid Sans", Arial, Helvetica, sans-serif;
-            font-weight: normal;
+            font-weight: bold;
             stroke-width: .5;
             font-size: 14px;
         }
@@ -26,7 +27,7 @@
 <body>
 <form>
     <!-- <h3> Weekly Snapshot <input type="range" id="weekslider" name="points" value = 2 min="0" max="52" onchange="weekly(this.value)"> 52 </h3> -->
-    <h3> Choose a week <input type="week", name="choose_week", min="2015-W01", max="2015=W52", placeholder="Please choose a week", onchange="weekly(parseInt(this.value.substring(6,8)))"></h3>
+    <h3> Choose a week <input type="week", name="choose_week", min="2015-W01", max="2015-W52", value="2015-W02", placeholder="Please choose a week", onchange="weekly(parseInt(this.value.substring(6,8)))"></h3>
 </form>
 <!-- <button onclick="addNodes()">Restart Animation</button> -->
 <script>
@@ -35,7 +36,7 @@
 
         // Add and remove elements on the graph object
         this.addNode = function (obj) {
-            var radius = 250,
+            var radius = 300,
                 noise = (Math.random() - .5) * radius/10,
 
                 circle_x = (Math.round(Math.random())*2 - 1) * radius * Math.random() + w/2,
@@ -108,7 +109,7 @@
 
         // set up the D3 visualisation in the specified element
         var w = 1200,
-            h = 640,
+            h = 800,
             r = 6;
 
         var color = d3.scale.category10();
