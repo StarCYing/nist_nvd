@@ -93,9 +93,12 @@ nvd = pull_nvd('./nvdcve-2.0-2015.xml')
 nvd_json = {'nodes':[],'links':[]}
 for cve in nvd.keys():
     if 'vuln_os' in nvd[cve].keys():
-        nvd_json['nodes'].append({'name':cve, 'group':nvd[cve]['vuln_date'][2], 'week':nvd[cve]['vuln_date'][1], 'threat':float(nvd[cve]['vuln_score']), 'type':1})
+        append_vuln = {'name':cve, 'group':nvd[cve]['vuln_date'][2], 'week':nvd[cve]['vuln_date'][1], 'threat':float(nvd[cve]['vuln_score']), 'type':1}
+        nvd_json['nodes'].append(append_vuln)
         for os in nvd[cve]['vuln_os']:
-            nvd_json['nodes'].append({'name':os, 'group':nvd[cve]['vuln_date'][2], 'week':nvd[cve]['vuln_date'][1], 'threat':0, 'type':0})
+            append_plat = {'name':os, 'group':nvd[cve]['vuln_date'][2], 'week':nvd[cve]['vuln_date'][1], 'threat':0, 'type':0}
+            if append_plat not in nvd_json['nodes']:
+                nvd_json['nodes'].append(append_plat)
             nvd_json['links'].append({'source':cve, 'target':os, 'group':nvd[cve]['vuln_date'][2], 'week':nvd[cve]['vuln_date'][1], 'threat':float(nvd[cve]['vuln_score'])})
 
 # Export to json

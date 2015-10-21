@@ -25,7 +25,8 @@
 </head>
 <body>
 <form>
-    <h3> Weekly Snapshot <input type="range" id="weekslider" name="points" value = 2 min="0" max="52" onchange="weekly(this.value)"> 52 </h3>
+    <!-- <h3> Weekly Snapshot <input type="range" id="weekslider" name="points" value = 2 min="0" max="52" onchange="weekly(this.value)"> 52 </h3> -->
+    <h3> Choose a week <input type="week", name="choose_week", min="2015-W01", placeholder="Please choose a week", onchange="weekly(parseInt(this.value.substring(6,8)))"></h3>
 </form>
 <!-- <button onclick="addNodes()">Restart Animation</button> -->
 <script>
@@ -34,21 +35,19 @@
 
         // Add and remove elements on the graph object
         this.addNode = function (obj) {
-            var radius = 300,
+            var radius = 250,
                 noise = (Math.random() - .5) * radius/10,
 
                 circle_x = (Math.round(Math.random())*2 - 1) * radius * Math.random() + w/2,
                 circle_y = Math.pow(Math.pow(radius,2) - Math.pow(circle_x - w/2, 2), .5) * (Math.round(Math.random())*2 - 1) + h/2;
 
-            console.log(circle_x, circle_y)
-
             nodes.push({"id": obj.name, 
                         "group": obj.group, 
                         "threat": obj.threat, 
-                        'type': d3.svg.symbolTypes[~~(Math.random() * d3.svg.symbolTypes.length)], 
-                        'x': circle_x,
-                        'y': circle_y
-                        // 'fixed': ((obj.type == 0) ? true : false),
+                        'type': d3.svg.symbolTypes[obj.type],
+                        'x': circle_x + noise,
+                        'y': circle_y + noise,
+                        'fixed': ((obj.type == 0) ? true : false)
                     });
             update();
         };
@@ -140,7 +139,7 @@
                         return d.source.id + "-" + d.target.id;
                     })
                     .attr("stroke-width", function (d) {
-                        return d.value / 10;
+                        return d.value / 100;
                     })
                     .attr("class", "link");
             link.append("title")
@@ -158,11 +157,13 @@
                     .attr("class", "node")
                     .call(force.drag);
 
-            nodeEnter.append("svg:circle")
-                    .attr("r", 8)
+            nodeEnter.append("svg:path")
                     .attr("id", function (d) {
                         return "Node;" + d.id;
                     })
+                    .attr("d", d3.svg.symbol()
+                        .size(function(d) { return (d.threat + 5) * 20; })
+                        .type(function(d) { return d.type; }))
                     .attr("class", "nodeStrokeClass")
                     .attr("fill", function(d) { return color(d.group); });
 
@@ -176,8 +177,8 @@
 
             node.exit().remove();
 
-            var padding = 5, // separation between circles
-            radius=25;
+            var padding = 5,
+                radius=25;
 
             function collide(alpha) {
               var quadtree = d3.geom.quadtree(nodes);
@@ -212,9 +213,6 @@
                     return "translate(" + Math.max(r, Math.min(w - r, d.x)) + "," + Math.max(r, Math.min(h - r, d.y)) + ")";
                 });
 
-                // node.attr("cx", function(d) { return d.x = Math.max(r, Math.min(w - r, d.x)); })
-                //     .attr("cy", function(d) { return d.y = Math.max(r, Math.min(h - r, d.y)); });
-
                 link.attr("x1", function (d) {
                     return d.source.x;
                 })
@@ -233,8 +231,8 @@
             // Restart the force layout.
             force
                     .gravity(-.001)
-                    .charge(-8)
-                    .friction(0)
+                    .charge(-30)
+                    .friction(0.5)
                     .linkDistance( function(d) { return d.value * 20 } )
                     .size([w, h])
                     .start();
@@ -250,6 +248,7 @@
 
         graph = new myGraph("#svgdiv");
 
+        // Load JSON and iteratively draw that weeks graph
         d3.json('./nvd.json', function(error, json){
             if (error) return console.warn(error);
             nodes = json.nodes;
@@ -275,6 +274,7 @@
 
     }
 
+    // Initialize on Week 2, first non-empty week
     var thisweek = 2;
     drawGraph(thisweek);
 
@@ -286,16 +286,10 @@
             gnode.parentNode.appendChild(gnode);
         });
     }
-    function addNodes() {
-        d3.select("svg")
-                .remove();
-        drawGraph(thisweek);
-    }
     function weekly(newweek){
         d3.select("svg")
                 .remove();
-        var thisweek = newweek;
-        drawGraph(thisweek);
+        drawGraph(newweek);
     }
 
 </script>
