@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Animating Changes in Force Diagram</title>
+    <title>2015 Weekly View of NIST National Vulnerablities Database</title>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <style>
@@ -26,7 +26,7 @@
 <body>
 <form>
     <!-- <h3> Weekly Snapshot <input type="range" id="weekslider" name="points" value = 2 min="0" max="52" onchange="weekly(this.value)"> 52 </h3> -->
-    <h3> Choose a week <input type="week", name="choose_week", min="2015-W01", placeholder="Please choose a week", onchange="weekly(parseInt(this.value.substring(6,8)))"></h3>
+    <h3> Choose a week <input type="week", name="choose_week", min="2015-W01", max="2015=W52", placeholder="Please choose a week", onchange="weekly(parseInt(this.value.substring(6,8)))"></h3>
 </form>
 <!-- <button onclick="addNodes()">Restart Animation</button> -->
 <script>
