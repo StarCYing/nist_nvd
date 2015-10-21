@@ -72,16 +72,16 @@ def pull_nvd(fname):
                 nvd_dict[vuln_id]['vuln_source'] = vuln_source
     return(nvd_dict)
 
-def pull_dict(fname):
-    plat_list = []
-    with open(fname) as f:
-        for ln in f:
-            if 'Vendor website' in ln:
-                # print ln
-                vend_web = re.search('http[s]*\:\/\/.*\.[A-Za-z0-9]*',ln)
-                # print vend_web.group()
-                plat_list.append(vend_web.group(0))
-    return(plat_list)
+# def pull_dict(fname):
+#     plat_list = []
+#     with open(fname) as f:
+#         for ln in f:
+#             if 'Vendor website' in ln:
+#                 # print ln
+#                 vend_web = re.search('http[s]*\:\/\/.*\.[A-Za-z0-9]*',ln)
+#                 # print vend_web.group()
+#                 plat_list.append(vend_web.group(0))
+#     return(plat_list)
 
 # Pull dictionary definitions
 # nvd_dict = pull_dict('./official-cpe-dictionary_v2.3.xml')
@@ -89,7 +89,7 @@ def pull_dict(fname):
 # Pull NVD dataset
 nvd = pull_nvd('./nvdcve-2.0-2015.xml')
 
-# create Node-Edge Json
+# create Node-Edge JSON
 nvd_json = {'nodes':[],'links':[]}
 for cve in nvd.keys():
     if 'vuln_os' in nvd[cve].keys():
@@ -129,6 +129,7 @@ for row in nvd_edge:
     if append_targ not in nvd_node:
         nvd_node.append(append_targ)
 
+# Export to CSV for Gephi
 with open('./nvd_edge.csv', 'wb') as csvfile:
     writeme = csv.writer(csvfile, delimiter=',')
     writeme.writerows(nvd_edge)
