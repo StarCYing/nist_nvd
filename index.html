@@ -533,12 +533,12 @@
 <br><br>
   <p style="font-family:Helvetica;"><span style="font-size:150%;color:darkred;"><strong>But what platforms over the year are most at risk?</strong></span>
     <br><br> A weekly snapshot reveals that for any given week of the year, 5 or more platforms can have vulnerabilities reported. But what are the most targeted platforms overall for 2015? To answer this, we draw the network graph for all of 2015 so far and size the platform nodes by in degree.
-    <br><br> Looking below, populous platforms are obviously more targeted but more interesting is the interaction between major platforms. Adobe is closely tied with the major operating systems and numerous vulnerabilites span the major operating systems and Adobe software. Likewise there is stron connecton between Novell and Canonical and Debian.
+    <br><br> Looking below, populous platforms are obviously more targeted but more interesting is the interaction between major platforms. Adobe is closely tied with the major operating systems and numerous vulnerabilites span the major operating systems and Adobe software. Likewise there is strong connecton between Novell and Canonical and Debian.
   </p>
 </div>
 
-<div style="background-color:black">
-    <object data="./img/network_2015.svg" type="image/svg+xml">
+<div style="background-color:black;margin-left:auto;margin-right:auto;text-align:center">
+    <object data="./img/network_2015.svg" type="image/svg+xml" align="center">
   <img src="./img/network_2015.png" height="2560" width="2560" />
 </object>
 </div>
@@ -547,7 +547,7 @@
 <div style="background-color:darkred; color:white">
   <div class="container-fluid main-container" >
     <br><br>
-    <p style="font-family:Helvetica"><span style="font-size:150%;"><strong>[Section to be completed] Get Started with NVD</strong></span>
+    <p style="font-family:Helvetica"><span style="font-size:150%;"><strong>Get Started with NVD</strong></span>
       <br>NVD Data can be used for assessing cyber security risk.
       <ul>
         <li> <strong>Parsing NIST NVD 2015 xml.</strong> Extracting relevant into a manipulable format. </li>
@@ -555,6 +555,7 @@
         <li> <strong>Creating network list for weekly view.</strong></li>
         <li> <strong>Creating edge and node list for annual view.</strong></li>
       </ul>
+      <br><a href="./nist_nvd_notebook.ipynb">Jupyter Notebook Version</a>
     </p>
     <pre><code>import re, pprint, csv, json, datetime
 from tqdm import *
