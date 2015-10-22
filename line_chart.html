@@ -9,7 +9,8 @@
       if (error) return console.warn(error);
 
       // Create the chart as usual
-      var myChart = new dimple.chart(svg, data);
+      // Needed to be empty chart initially
+      var myChart = new dimple.chart(svg);
       myChart.setBounds(70, 40, 1400, 540);
 
       // Create Separate Date and Time, this allows us to draw them
@@ -53,7 +54,6 @@
       // Add the bubble series for shift values first so that it is
       // drawn behind the lines
       var s1 = myChart.addSeries("Weighted", dimple.plot.line, [x, y]);
-      console.log([]);
       s1.data = data[0];
       s1.lineMarkers = true;
       seriesDict['Weighted'] = { data: data[0], series: s1, visible: true }
