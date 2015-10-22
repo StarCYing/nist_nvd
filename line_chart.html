@@ -3,7 +3,7 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
   <script type="text/javascript">
-    var svg = dimple.newSvg("#chartContainer", 1600, 600);
+    var svg = dimple.newSvg("#chartContainer", 1200, 500);
 
     d3.json('./nvd_timeline.json', function(error, data){
       if (error) return console.warn(error);
@@ -11,7 +11,7 @@
       // Create the chart as usual
       // Needed to be empty chart initially
       var myChart = new dimple.chart(svg);
-      myChart.setBounds(70, 40, 1400, 540);
+      myChart.setBounds(70, 40, 1200, 400);
 
       // Create Separate Date and Time, this allows us to draw them
       // on separate axes.  Despite the time axis only displaying
@@ -53,15 +53,15 @@
 
       // Add the bubble series for shift values first so that it is
       // drawn behind the lines
-      var s1 = myChart.addSeries("Weighted", dimple.plot.line, [x, y]);
+      var s1 = myChart.addSeries("Weighted Threat", dimple.plot.line, [x, y]);
       s1.data = data[0];
       s1.lineMarkers = true;
-      seriesDict['Weighted'] = { data: data[0], series: s1, visible: true }
+      seriesDict['Weighted Threat'] = { data: data[0], series: s1, visible: true }
 
-      var s2 = myChart.addSeries("Count", dimple.plot.line, [x, y]);
+      var s2 = myChart.addSeries("Count of Vulnerabilities", dimple.plot.line, [x, y]);
       s2.data = data[1];
       s2.lineMarkers = true;
-      seriesDict['Count'] = { data: data[1], series: s2, visible: true }
+      seriesDict['Count of Vulnerabilities'] = { data: data[1], series: s2, visible: true }
 
       // Show a legend
       myLegend = myChart.addLegend(180, 10, 360, 20, "right");
@@ -83,7 +83,7 @@
             d3.select(this).style("opacity", 1);     
             seriesDict[e.aggField[0]].visible = true;
         }
-        myChart.draw(2000);
+        myChart.draw(1000);
       });
 
     });
