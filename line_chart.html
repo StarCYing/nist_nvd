@@ -1,0 +1,93 @@
+<html>
+<div id="chartContainer">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
+  <script type="text/javascript">
+    var svg = dimple.newSvg("#chartContainer", 1600, 600);
+
+    d3.json('./nvd_timeline.json', function(error, data){
+      if (error) return console.warn(error);
+
+      // Create the chart as usual
+      var myChart = new dimple.chart(svg, data);
+      myChart.setBounds(70, 40, 1400, 540);
+
+      // Create Separate Date and Time, this allows us to draw them
+      // on separate axes.  Despite the time axis only displaying
+      // the time portion, the whole date is used so they need to
+      // have the same date allocated
+      data[0].forEach(function (d) {
+          d["Day"] = d["Date"].substring(0, d["Date"].length - 9);
+          d["Time of Day"] =
+              "2000-01-01 " + d["Date"].substring(d["Date"].length - 8, d["Date"].length - 3);
+      }, this);
+      data[1].forEach(function (d) {
+          d["Day"] = d["Date"].substring(0, d["Date"].length - 9);
+          d["Time of Day"] =
+              "2000-01-01 " + d["Date"].substring(d["Date"].length - 8, d["Date"].length - 3);
+      }, this);
+      
+      // Add the x axis reading dates in the format 01 Jan 2012
+      // and displaying them 01 Jan
+      var x = myChart.addTimeAxis("x", "Day", "%d %b %Y", "%d %b");
+        x.title = 'Day';
+
+      // Add the y axis reading dates and times but only outputting
+      // times.  
+      // var y = myChart.addTimeAxis("y", "Value",
+      //     "%Y-%m-%d %H:%M", "%H:%M");
+      var y = myChart.addMeasureAxis("y", "Value");
+        y.title = 'Value';
+      
+      // Setting min and max dates requires them to be set
+      // as actual javascript date objects
+      // x.overrideMin = new Date("2015-01-01");
+      // x.overrideMax = new Date("2015-09-01");
+      y.tickFormat = '1g';
+
+      x.timePeriod = d3.time.weeks;
+      x.timeInterval = 8;
+
+      var seriesDict = {};
+
+      // Add the bubble series for shift values first so that it is
+      // drawn behind the lines
+      var s1 = myChart.addSeries("Weighted", dimple.plot.line, [x, y]);
+      console.log([]);
+      s1.data = data[0];
+      s1.lineMarkers = true;
+      seriesDict['Weighted'] = { data: data[0], series: s1, visible: true }
+
+      var s2 = myChart.addSeries("Count", dimple.plot.line, [x, y]);
+      s2.data = data[1];
+      s2.lineMarkers = true;
+      seriesDict['Count'] = { data: data[1], series: s2, visible: true }
+
+      // Show a legend
+      myLegend = myChart.addLegend(180, 10, 360, 20, "right");
+
+      // Draw everything
+      myChart.draw();
+      myChart.legends = [];
+
+      myLegend.shapes.selectAll("rect")
+      // Add a click event to each rectangle
+      .on("click", function (e) {
+        var meta = seriesDict[e.aggField[0]];
+        if (seriesDict[e.aggField[0]].visible) {
+            meta.series.data = [];
+            d3.select(this).style("opacity", 0.2);
+            seriesDict[e.aggField[0]].visible = false;
+        } else {
+            meta.series.data = meta.data;         
+            d3.select(this).style("opacity", 1);     
+            seriesDict[e.aggField[0]].visible = true;
+        }
+        myChart.draw(2000);
+      });
+
+    });
+
+  </script>
+</div>
+</html>

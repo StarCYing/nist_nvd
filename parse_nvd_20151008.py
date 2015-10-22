@@ -26,10 +26,12 @@ def pull_nvd(fname):
                 nvd_dict[vuln_id]['vuln_os_plat'].append(re.sub('_',' ',vuln_os_plat[4])+' '+re.sub('_',' ',vuln_os_plat[5]))
             elif '<vuln:published-datetime>' in ln:
                 vuln_date = re.search('2015.*<', ln).group(0)[:-1]
-                date = [int(vuln_date[0:4]),int(vuln_date[5:7]),int(vuln_date[8:10])]
+                date = [int(vuln_date[0:4]),int(vuln_date[5:7]),int(vuln_date[8:10]), int(vuln_date[11:13]), int(vuln_date[14:16]), int(vuln_date[17:19])]
                 date_num = datetime.date(date[0],date[1],date[2]).isocalendar()
+                datetime_num = datetime.datetime(date[0],date[1],date[2],date[3],date[4],date[5]).strftime('%d %b %Y %X')
                 # print '    --->%s'%vuln_date
                 nvd_dict[vuln_id]['vuln_date'] = date_num
+                nvd_dict[vuln_id]['vuln_datetime'] = datetime_num
             elif '<cvss:score>' in ln:
                 vuln_score = re.search('\d?\d.\d', ln).group(0)
                 # print '    --->%s'%vuln_score
@@ -88,6 +90,26 @@ def pull_nvd(fname):
 
 # Pull NVD dataset
 nvd = pull_nvd('./nvdcve-2.0-2015.xml')
+
+# Create timeline of 2015
+nvd_timeline = [[],[]]
+for cve in nvd.keys():
+    if 'vuln_score' in nvd[cve].keys():
+        weightedme = {'Method':'Weighted', 'Date':nvd[cve]['vuln_datetime'], 'Value':float(nvd[cve]['vuln_score'])}
+        countme = {'Method':'Count', 'Date':nvd[cve]['vuln_datetime'], 'Value':1}
+        if nvd[cve]['vuln_datetime'] not in [ x['Date'] for x in nvd_timeline[0] ]:
+            nvd_timeline[0].append(weightedme)
+            nvd_timeline[1].append(countme)
+        else:
+            for i, day in enumerate(nvd_timeline[0]):
+                if nvd[cve]['vuln_datetime'] in day['Date'] and day['Method'] == 'Weighted':
+                    nvd_timeline[0][i]['Value'] += float(nvd[cve]['vuln_score'])
+                elif nvd[cve]['vuln_datetime'] in day['Date'] and day['Method'] == 'Count':
+                    nvd_timeline[1][i]['Value'] += 1
+
+# Export to json
+with open('./nvd_timeline.json', 'wb') as f:
+    json.dump(nvd_timeline, f)
 
 # create Node-Edge JSON
 nvd_json = {'nodes':[],'links':[]}
