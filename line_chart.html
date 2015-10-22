@@ -51,12 +51,12 @@
 
       // Add the bubble series for shift values first so that it is
       // drawn behind the lines
-      var s1 = myChart.addSeries("Weighted Threat", dimple.plot.line, [x, y]);
+      var s1 = myChart.addSeries("Weighted Threat", dimple.plot.bubble, [x, y]);
       s1.data = data[0];
       s1.lineMarkers = true;
       seriesDict['Weighted Threat'] = { data: data[0], series: s1, visible: true }
 
-      var s2 = myChart.addSeries("Count of Vulnerabilities", dimple.plot.line, [x, y]);
+      var s2 = myChart.addSeries("Count of Vulnerabilities", dimple.plot.bubble, [x, y]);
       s2.data = data[1];
       s2.lineMarkers = true;
       seriesDict['Count of Vulnerabilities'] = { data: data[1], series: s2, visible: true }
