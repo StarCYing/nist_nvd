@@ -3,7 +3,9 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
   <script type="text/javascript">
-    var svg = dimple.newSvg("#chartContainer", 1200, 500);
+    var w = window.innerWidth,
+        h = window.innerHeight/3;
+    var svg = dimple.newSvg("#chartContainer", w - 20, h);
 
     d3.json('./nvd_timeline.json', function(error, data){
       if (error) return console.warn(error);
@@ -11,7 +13,7 @@
       // Create the chart as usual
       // Needed to be empty chart initially
       var myChart = new dimple.chart(svg);
-      myChart.setBounds(70, 40, 1200, 400);
+      myChart.setBounds(70, 40, w - 40, h - 80);
 
       data[0].forEach(function (d) {
           d["Day"] = d["Date"].substring(0, d["Date"].length - 9);
