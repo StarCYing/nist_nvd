@@ -39,15 +39,21 @@
             var radius = 300,
                 noise = (Math.random() - .5) * radius/10,
 
-                circle_x = (Math.round(Math.random())*2 - 1) * radius * Math.random() + w/2,
-                circle_y = Math.pow(Math.pow(radius,2) - Math.pow(circle_x - w/2, 2), .5) * (Math.round(Math.random())*2 - 1) + h/2;
+                circle_x = (Math.round(Math.random())*2 - 1) * radius * Math.random() + w/2 + noise,
+                circle_y = Math.pow(Math.pow(radius,2) - Math.pow(circle_x - w/2, 2), .5) * (Math.round(Math.random())*2 - 1) + h/2 + noise,
+
+                center_x = (Math.random - 0.5) * w + noise*5,
+                center_y = h/2 + noise*5,
+
+                final_x = (obj.type == 0) ? center_x : circle_x,
+                final_y = (obj.type == 0) ? center_y : circle_y;
 
             nodes.push({"id": obj.name, 
                         "group": obj.group, 
                         "threat": obj.threat, 
                         'type': d3.svg.symbolTypes[obj.type],
-                        'x': circle_x + noise,
-                        'y': circle_y + noise,
+                        'x': final_x,
+                        'y': final_y,
                         'fixed': ((obj.type == 0) ? true : false)
                     });
             update();
@@ -109,7 +115,7 @@
 
         // set up the D3 visualisation in the specified element
         var w = 1200,
-            h = 800,
+            h = 640,
             r = 6;
 
         var color = d3.scale.category10();
