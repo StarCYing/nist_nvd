@@ -13,10 +13,6 @@
       var myChart = new dimple.chart(svg);
       myChart.setBounds(70, 40, 1200, 400);
 
-      // Create Separate Date and Time, this allows us to draw them
-      // on separate axes.  Despite the time axis only displaying
-      // the time portion, the whole date is used so they need to
-      // have the same date allocated
       data[0].forEach(function (d) {
           d["Day"] = d["Date"].substring(0, d["Date"].length - 9);
           d["Time of Day"] =
