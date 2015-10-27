@@ -7,7 +7,7 @@
     <style>
         .link {
             stroke: #2E2E2E;
-            stroke-width: 2px;
+            stroke-width: 1px;
         }
 
         .node {
@@ -51,7 +51,7 @@
             nodes.push({"id": obj.name, 
                         "group": obj.group, 
                         "threat": obj.threat, 
-                        'type': d3.svg.symbolTypes[obj.type],
+                        'type': d3.svg.symbolTypes[obj.type * 3],
                         'x': final_x,
                         'y': final_y,
                         'fixed': ((obj.type == 0) ? true : false)
@@ -169,7 +169,7 @@
                         return "Node;" + d.id;
                     })
                     .attr("d", d3.svg.symbol()
-                        .size(function(d) { return (d.threat + 5) * 20; })
+                        .size(function(d) { return (Math.pow(d.threat,3) + 5) * 20; })
                         .type(function(d) { return d.type; }))
                     .attr("class", "nodeStrokeClass")
                     .attr("fill", function(d) { return color(d.group); });

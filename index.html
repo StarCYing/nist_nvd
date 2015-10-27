@@ -12,7 +12,7 @@
             <style>
         .link {
             stroke: #2E2E2E;
-            stroke-width: 2px;
+            stroke-width: 1px;
         }
 
         .node {
@@ -275,7 +275,7 @@
                 nodes.push({"id": obj.name, 
                             "group": obj.group, 
                             "threat": obj.threat, 
-                            'type': d3.svg.symbolTypes[obj.type],
+                            'type': d3.svg.symbolTypes[obj.type*3],
                             'x': final_x,
                             'y': final_y,
                             'fixed': ((obj.type == 0) ? true : false)
@@ -393,7 +393,7 @@
                             return "Node;" + d.id;
                         })
                         .attr("d", d3.svg.symbol()
-                            .size(function(d) { return (d.threat + 5) * 20; })
+                            .size(function(d) { return (Math.pow(d.threat,2) + 5) * 20; })
                             .type(function(d) { return d.type; }))
                         .attr("class", "nodeStrokeClass")
                         .attr("fill", function(d) { return color(d.group); });
@@ -437,6 +437,30 @@
                     });
                   };
                 }
+
+                var colorUsed = [color(1),color(2),color(3),color(4),color(5),color(6),color(7)]
+
+                var legend = vis.selectAll(".legend")
+                            .data(colorUsed)
+                        .enter().append("g")
+                            .attr("class", "legend")
+                            .attr("transform", function(d, i) { return "translate(-10," + i * 20 + ")"; });
+
+                legend.append("rect")
+                      .attr("x", w - 18)
+                      .attr("width", 18)
+                      .attr("height", 18)
+                      .style("fill", function(d) { return d; });
+
+                legend.append("text")
+                      .attr("x", w - 24)
+                      .attr("y", 9)
+                      .attr("dy", ".35em")
+                      .attr("class", "legendText")
+                      .style("text-anchor", "end")
+                      .text(function(d) { return d; });
+
+                // console.log(legend.g);
 
                 force.on("tick", function () {
 
@@ -521,7 +545,6 @@
         function weekly(newweek){
             d3.select("#svg_net")
                     .remove();
-            // myGraph();
             drawGraph(newweek);
         }
 
@@ -538,7 +561,7 @@
 </div>
 
 <div style="background-color:darkred;margin-left:auto;margin-right:auto;text-align:center">
-    <object data="./img/network_2015.svg" type="image/svg+xml" align="center">
+    <object data="./img/network_2015.svg" type="image/svg+xml">
   <img src="./img/network_2015.png" height="2560" width="2560" />
 </object>
 </div>
